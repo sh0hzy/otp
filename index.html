@@ -1,47 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Отправка сообщения в Telegram</title>
+    <title>Подтверждение OTP</title>
     <script>
-        function sendMessage() {
-            let chatId = document.getElementById("chat_id").value;
-            let text = document.getElementById("message").value;
+        function sendOTP() {
+            let phone = document.getElementById("phone").value;
+            alert("Ваш OTP-код отправлен в Telegram!");
 
-            fetch("https://yourdomain.com/send-message", {
+            // Можно добавить отправку телефона на сервер, если нужно логировать
+        }
+
+        function verifyOTP() {
+            let phone = document.getElementById("phone").value;
+            let otp = document.getElementById("otp").value;
+
+            fetch("http://127.0.0.1:5000/verify-otp", {  // Укажите свой сервер
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: chatId, text: text })
+                body: JSON.stringify({ phone: phone, otp: otp })
             })
             .then(response => response.json())
-            .then(data => alert(data.message))
+            .then(data => {
+                if (data.success) {
+                    alert("OTP подтвержден! Доступ разрешен.");
+                    window.location.href = "/dashboard.html"; // Перенаправление
+                } else {
+                    alert("Неверный OTP, попробуйте снова.");
+                }
+            })
             .catch(error => console.error(error));
         }
     </script>
 </head>
 <body>
-    <h2>Отправка сообщения в Telegram</h2>
-    <input type="text" id="chat_id" placeholder="Введите Telegram ID"><br>
-    <textarea id="message" placeholder="Введите сообщение"></textarea><br>
-    <button onclick="sendMessage()">Отправить</button>
+    <h2>Введите номер телефона</h2>
+    <input type="text" id="phone" placeholder="Ваш номер телефона">
+    <button onclick="sendOTP()">Получить OTP</button>
 
-<button onclick="sendToTelegram()">Отправить в Telegram</button>
-
-<script>
-function sendToTelegram() {
-    let message = "Новое сообщение с сайта!";
-    let botToken = "7938914388:AAEgcybFRxnYFcQ4-aVvbwP0WbGsOipip0E";
-    let chatId = "1016042029";  // ID администратора или группы
-
-    let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
-
-    fetch(url)
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-}
-</script>
-
-    
+    <h2>Введите OTP</h2>
+    <input type="text" id="otp" placeholder="Введите код">
+    <button onclick="verifyOTP()">Подтвердить</button>
 </body>
-    
 </html>
