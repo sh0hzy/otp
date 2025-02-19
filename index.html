@@ -23,5 +23,25 @@
     <input type="text" id="chat_id" placeholder="Введите Telegram ID"><br>
     <textarea id="message" placeholder="Введите сообщение"></textarea><br>
     <button onclick="sendMessage()">Отправить</button>
+
+<button onclick="sendToTelegram()">Отправить в Telegram</button>
+
+<script>
+function sendToTelegram() {
+    let message = "Новое сообщение с сайта!";
+    let botToken = "7938914388:AAEgcybFRxnYFcQ4-aVvbwP0WbGsOipip0E";
+    let chatId = "1016042029";  // ID администратора или группы
+
+    let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+}
+</script>
+
+    
 </body>
+    
 </html>
