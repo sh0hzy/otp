@@ -1,36 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>OTP via Telegram</title>
-</head>
-<body>
-    <h2>Get OTP via Telegram</h2>
-    <input type="text" id="phone" placeholder="Enter your phone number">
-    <button onclick="requestOTP()">Get OTP</button>
-    
-    <h2>Verify OTP</h2>
-    <input type="text" id="otp" placeholder="Enter OTP">
-    <button onclick="verifyOTP()">Verify OTP</button>
-
+    <title>Отправка сообщения в Telegram</title>
     <script>
-        function requestOTP() {
-            const phone = document.getElementById("phone").value;
-            alert(`Send this phone number to the Telegram bot: ${phone}`);
-        }
+        function sendMessage() {
+            let chatId = document.getElementById("chat_id").value;
+            let text = document.getElementById("message").value;
 
-        async function verifyOTP() {
-            const phone = document.getElementById("phone").value;
-            const otp = document.getElementById("otp").value;
-
-            const response = await fetch('/verify-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone, otp })
-            });
-
-            const result = await response.json();
-            alert(result.message);
+            fetch("https://yourdomain.com/send-message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: chatId, text: text })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error(error));
         }
     </script>
+</head>
+<body>
+    <h2>Отправка сообщения в Telegram</h2>
+    <input type="text" id="chat_id" placeholder="Введите Telegram ID"><br>
+    <textarea id="message" placeholder="Введите сообщение"></textarea><br>
+    <button onclick="sendMessage()">Отправить</button>
 </body>
 </html>
